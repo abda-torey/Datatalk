@@ -1,0 +1,25 @@
+# Terraform
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform.lock.hcl
+terraform/.terraform/providers/
+
+# Sensitive keys
+terraform/keys/
+
+# Docker & Compose files
+week-1/Dockerfile
+week-1/docker-compose.yml
+
+# Jupyter Notebooks checkpoints
+week-1/notebooks/.ipynb_checkpoints/
+
+# Data files (CSV, Parquet, etc.)
+week-1/notebooks/taxi_data_2021.csv
+week-1/notebooks/yellow_tripdata_2021-01.parquet
+week-1/notebooks/taxi_data_2021
+
+# Python cache files
+*.pyc
+__pycache__/
