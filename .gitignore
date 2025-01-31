@@ -19,7 +19,8 @@ week-1/notebooks/.ipynb_checkpoints/
 week-1/notebooks/taxi_data_2021.csv
 week-1/notebooks/yellow_tripdata_2021-01.parquet
 week-1/notebooks/taxi_data_2021
-
+week-1/notebooks/green_tripdata_2019-10.csv
+week-1/notebooks/taxi_zone_lookup.csv
 # Python cache files
 *.pyc
 __pycache__/

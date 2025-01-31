@@ -28,3 +28,9 @@ resource "google_storage_bucket" "bucket-demo" {
     }
   }
 }
+
+resource "google_bigquery_dataset" "dataset" {
+  dataset_id = "zoomcamp"
+  project    = "taxi-data-447320"
+  location   = "EU"
+}
