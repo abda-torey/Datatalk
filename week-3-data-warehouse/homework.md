@@ -45,14 +45,17 @@ reading more data than querying one column (PULocationID), leading to a higher e
 
 ## Question 4:
 How many records have a fare_amount of 0?
-``` SELECT COUNT(*) FROM `taxi-data-447320.nyc_taxi_data.nyc_regular_table` 
-WHERE fare_amount = 0
-; ```
+
+``` 
+SELECT COUNT(*) FROM `taxi-data-447320.nyc_taxi_data.nyc_regular_table` 
+WHERE fare_amount = 0; 
+```
 - 8,333
 
 ## Question 5:
 What is the best strategy to make an optimized table in Big Query if your query will always filter based on tpep_dropoff_datetime and order the results by VendorID (Create a new table with this strategy)
-```  CREATE OR REPLACE TABLE `taxi-data-447320.nyc_taxi_data.nyc_taxi_partitioned`
+``` 
+CREATE OR REPLACE TABLE `taxi-data-447320.nyc_taxi_data.nyc_taxi_partitioned`
 PARTITION BY DATE(tpep_dropoff_datetime)
 CLUSTER BY VendorID
 AS
