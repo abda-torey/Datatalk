@@ -24,3 +24,5 @@ week-1/notebooks/taxi_zone_lookup.csv
 # Python cache files
 *.pyc
 __pycache__/
+
+week-3-data-warehouse/myenv
