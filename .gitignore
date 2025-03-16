@@ -26,3 +26,6 @@ week-1/notebooks/taxi_zone_lookup.csv
 __pycache__/
 
 week-3-data-warehouse/myenv
+data/
+myenv
+week-7-streaming-pyflink/keys/first-key.json
