@@ -1,8 +1,8 @@
 from pyflink.datastream import StreamExecutionEnvironment
-from pyflink.table import EnvironmentSettings, DataTypes, TableEnvironment, StreamTableEnvironment
+from pyflink.table import EnvironmentSettings, StreamTableEnvironment
 
 
-def create_taxi_events_sink_gcs(t_env):
+def create_taxi_events_sink_local(t_env):
     table_name = 'taxi_events_sink'
     sink_ddl = f"""
         CREATE TABLE {table_name} (
@@ -29,9 +29,9 @@ def create_taxi_events_sink_gcs(t_env):
             pickup_timestamp TIMESTAMP
         ) WITH (
             'connector' = 'filesystem',
-            'path' = 'gs://fake-ecommerce-taxi-data-447320/',
+            'path' = 'file:///opt/data/taxi_events/',  -- local filesystem path
             'format' = 'csv',
-            'sink.parallelism' = '4'  -- Control the number of output files based on parallelism
+            'sink.parallelism' = '4'
         )
     """
     t_env.execute_sql(sink_ddl)
@@ -42,7 +42,6 @@ def create_taxi_events_sink_gcs(t_env):
 def create_events_source_kafka(t_env):
     table_name = "taxi_events_source"
 
-    
     pattern = "yyyy-MM-dd HH:mm:ss"
     
     source_ddl = f"""
@@ -82,11 +81,11 @@ def create_events_source_kafka(t_env):
         
     return table_name
 
+
 def log_processing():
     # Set up the execution environment
     env = StreamExecutionEnvironment.get_execution_environment()
     env.enable_checkpointing(10 * 1000)
-    # env.set_parallelism(1)
 
     # Set up the table environment
     settings = EnvironmentSettings.new_instance().in_streaming_mode().build()
@@ -94,11 +93,12 @@ def log_processing():
     try:
         # Create Kafka table
         source_table = create_events_source_kafka(t_env)
-        gcs_sink = create_taxi_events_sink_gcs(t_env)
-        # write records to postgres too!
+        local_sink = create_taxi_events_sink_local(t_env)
+
+        # Insert records into the local filesystem sink
         t_env.execute_sql(
             f"""
-            INSERT INTO {gcs_sink}
+            INSERT INTO {local_sink}
                     SELECT
                     VendorID,
                     lpep_pickup_datetime,
@@ -126,7 +126,7 @@ def log_processing():
         ).wait()
 
     except Exception as e:
-        print("Writing records from Kafka to GCP failed:", str(e))
+        print("Writing records from Kafka to local filesystem failed:", str(e))
 
 
 if __name__ == '__main__':
