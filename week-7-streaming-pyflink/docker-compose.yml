@@ -92,6 +92,24 @@ services:
         taskmanager.numberOfTaskSlots: 15
         parallelism.default: 3
       - GOOGLE_APPLICATION_CREDENTIALS:/opt/keys/first-key.json
+  
+  uploader:
+    image: google/cloud-sdk:latest
+    depends_on:
+      - jobmanager
+    volumes:
+      - ./data/taxi_events:/opt/data/taxi_events   # Same local directory
+      - ./keys/first-key.json:/opt/keys/first-key.json
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/opt/keys/first-key.json
+    entrypoint: >
+      sh -c "gcloud auth activate-service-account --key-file /opt/keys/first-key.json &&
+          while true; do 
+                  gsutil -m rsync -r /opt/data/taxi_events gs://fake-ecommerce-taxi-data-447320/taxi_events;
+                  sleep 60;
+                done"
+
+  
   postgres:
     image: postgres:14
     restart: on-failure
